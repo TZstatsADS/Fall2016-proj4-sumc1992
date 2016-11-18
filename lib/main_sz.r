@@ -51,3 +51,20 @@ music_rf_pre<-predict(music_rf,music_feature_test,type="vote",norm.votes=T)
 rank_result <- rank_list(true_p20, music_rf_pre)
 rank_result <- rbind(true_p20[,1],rank_result)
 save.image("~/Desktop/p4_trainmodel.rdata")
+
+############################### Prediction #####################################
+test_data_path <- '/Users/senzhuang/Documents/GitHub/Fall2016-proj4-sumc1992/data/TestSongFile100/'
+test_data <- test_features_gen(test_data_path)
+
+# Apply PCA
+test_data_pca <- as.matrix(test_data$d2) %*% features$pca_matrix
+test_data_pca <- cbind(test_data$d1, test_data_pca)
+
+# Predictions with RF
+pred <- predict(music_rf, test_data_pca[,-1], type = 'vote', norm.votes=T)
+
+# Matrix mutiplication for ranking
+final_rank <- rank_list(true_p20, pred)
+final_rank <- rbind(true_p20[,1],final_rank)
+
+write.csv(final_rank,'/Users/senzhuang/Desktop/output.csv')

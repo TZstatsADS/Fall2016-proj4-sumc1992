@@ -19,7 +19,8 @@ adjust_prob <- function(lyr, label) {
         }
         result <- t(result)
         result <- cbind(colnames(new_lyr)[2:5001], result)
-        result <- result[-c(2,3,6:30),]
+        result[c(2,3,6:30),2:21] <- rep(0,20)
+        
         return(result)
 }
 
@@ -154,11 +155,47 @@ prep_csf <- function(features, label) {
 
 # View ranking result
 rank_list <- function(adjusted_pp, predictions) {
-        adjusted_pp <- t(matrix(as.numeric(unlist(true_p20[,-1])), nrow=nrow(true_p20[,-1])))
-        predictions <- as.matrix(music_rf_pre[,1:20])
+        adjusted_pp <- t(matrix(as.numeric(unlist(adjusted_pp[,-1])), 
+                                nrow=nrow(adjusted_pp[,-1])))
+        predictions <- as.matrix(predictions[,1:20])
         result<- predictions %*% adjusted_pp
         for (i in 1:nrow(result)){
-                result[i,]=rank(-result[i,])
+                result[i,]=rank(-result[i,], ties.method = 'first')
         }
+        result[,c(2,3,6:30)] <- rep(4987, nrow(result))
+        return(result)
+}
+
+# Extract test features
+test_features_gen <- function(test_data_path) {
+        setwd(test_data_path)
+        file_names <- list.files(recursive = T)
+        file_num <- length(file_names)
+        test_data1 <- data.frame(matrix(ncol = 1, nrow = 0))
+        test_data2 <- data.frame(matrix(ncol = 22151, nrow = 0))
+        n <- 1
+        for(i in 1:file_num){
+                data <- h5read(file_names[i], "analysis")
+                H5close()
+                song_id <- substring(file_names[i], nchar(file_names[i])-20, nchar(file_names[i])-3)
+                bars_s <- feature_truncate_1d(data$bars_start, 120)
+                beats_s <- feature_truncate_1d(data$beats_start, 446)
+                sections_s <- feature_truncate_1d(data$sections_start, 9)
+                segments_s <- feature_truncate_1d(data$segments_start, 744)
+                segments_l_m <- feature_truncate_1d(data$segments_loudness_max, 744)
+                segments_l_m_t <- feature_truncate_1d(data$segments_loudness_max_time, 744)
+                segments_l_s <- feature_truncate_1d(data$segments_loudness_start, 744)
+                segments_p <- feature_truncate_2d(data$segments_pitches, 744)
+                segments_t <- feature_truncate_2d(data$segments_timbre, 744)
+                tatums_s <- feature_truncate_1d(data$tatums_start, 744)
+                new_data_row <- c(bars_s, beats_s, sections_s, segments_s, segments_l_m, segments_l_m_t,
+                                  segments_l_s, segments_p, segments_t, tatums_s)
+                test_data1[n,] <- song_id
+                test_data2[n,] <- new_data_row
+                n <- n+1
+        }
+        test_data2 <- cbind(test_data2[,1:566], test_data2[,568:575], test_data2[,577:22151])
+        test_data <- cbind(test_data1, test_data2)
+        result <- list('d1' = test_data, 'd2' = test_data2)
         return(result)
 }
