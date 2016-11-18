@@ -11,7 +11,7 @@ Term: Fall 2016
 + Name: Sen Zhuang (sz2536)
 + Projec title: Words 4 Music
 + Project summary:
-In this project, I examinated music qualities/features and frequencies of terms in lyrics in hope of building a predictive model to produce a ranking for terms in lyrics. 
+In this project, I examinated music qualities/features and frequencies of terms in lyrics in hope of building a predictive model to produce a ranking for terms (How frequently do we expect certain words to appear?)
 
 ## Where to find my scripts
 ```
