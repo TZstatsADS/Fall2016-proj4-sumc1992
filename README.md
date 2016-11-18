@@ -8,9 +8,9 @@ Term: Fall 2016
 
 + [Data link](https://courseworks2.columbia.edu/courses/11849/files/folder/Project_Files?preview=763391)-(**courseworks login required**)
 + [Data description](doc/readme.html)
-+ Contributor's name:
-+ Projec title: Lorem ipsum dolor sit amet
-+ Project summary: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
++ Contributor's name: Sen Zhuang (sz2536)
++ Projec title: Words 4 Music
++ Project summary: In this project, I examinated music qualities/features and frequencies of terms in lyrics in hope of building a predictive model to produce a ranking for terms in lyrics. Tokenized terms are first converted to single strings for text preping and matrix creation. Frequenly used terms, numbers and punctuations are removed for topic modeling / LDA process. Here number of topics is set to 20. Once cooresponding probabilities for each song are produced, I then manually recalculated probabilities for terms so we account for frequenly used terms, numbers and punctuations when making final predictions. Music features from H5 are extracted with examination of missing values, abnormalites and information usefullness in mind. In predictive modeling part, I tested various machine learning models such as random forest, knn, cart and naive bayes. Based on accuracy and efficiency, I decided to pursue random forest modeling.
 	
 Following [suggestions](http://nicercode.github.io/blog/2013-04-05-projects/) by [RICH FITZJOHN](http://nicercode.github.io/about/#Team) (@richfitz). This folder is orgarnized as follows.
 
